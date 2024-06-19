@@ -1,18 +1,4 @@
--- using CTE
-WITH tempDiff AS(
-    SELECT
-        id,
-        recordDate,
-        temperature,
-        LAG(temperature) OVER (ORDER BY recordDate) AS prevTemp,
-        LAG(recordDate) OVER (ORDER BY recordDate) AS prevDate
-    FROM 
-        Weather
-)
-SELECT
-    id
-FROM
-    tempDiff
-WHERE
-    temperature > prevTemp AND
-    recordDate = prevDate + INTERVAL '1 day';
+SELECT w2.id as Id
+from Weather w1 
+join Weather w2 ON w1.recordDate + INTERVAL '1 day'  = w2.recordDate
+WHERE w2.temperature > w1.temperature;
